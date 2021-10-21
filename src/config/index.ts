@@ -1,7 +1,4 @@
-import database from './database';
-
 const config = {
-  db: database,
   logger: {
     debug: !!process.env.DEBUG,
   },
