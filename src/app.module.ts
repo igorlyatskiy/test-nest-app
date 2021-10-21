@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UsersModule } from './users/users.module';
 import { typeormConfigFactory } from './config/typeorm.config';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { typeormConfigFactory } from './config/typeorm.config';
       useFactory: typeormConfigFactory,
     }),
     UsersModule,
+    PostsModule,
   ],
 })
 export class AppModule {}
