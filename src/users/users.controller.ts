@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserModel } from './user.model';
+import { User } from '../models/users.entity';
 
 @Controller('users')
 export class UsersController {
@@ -13,7 +13,7 @@ export class UsersController {
   }
 
   @Post()
-  addUser(@Body() createUserDto: CreateUserDto): UserModel {
+  addUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.addUser(createUserDto);
   }
 }

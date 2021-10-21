@@ -5,4 +5,5 @@ export default {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   dialect: 'postgres',
+  synchronize: !!process.env.DB_SYNC,
 };
