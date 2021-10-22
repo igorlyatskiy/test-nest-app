@@ -1,4 +1,7 @@
-const config = {
+import { config } from 'dotenv';
+config();
+
+const localConfig = {
   logger: {
     debug: !!process.env.DEBUG,
   },
@@ -19,4 +22,4 @@ const config = {
   },
 };
 
-export default config;
+export default localConfig;

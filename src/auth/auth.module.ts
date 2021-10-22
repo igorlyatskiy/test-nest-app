@@ -16,9 +16,8 @@ import config from '../config';
     JwtModule.register({
       secret: config.jwt.secret,
       signOptions: {
-        expiresIn: 324,
+        expiresIn: config.jwt.exp,
       },
-      //TODO REMOVE THIS
     }),
     UsersModule,
     TypeOrmModule.forFeature([UsersRepository]),
