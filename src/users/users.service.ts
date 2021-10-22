@@ -14,7 +14,15 @@ export class UsersService {
     return this.usersRepository.getAllUsers();
   }
 
-  async addUser(createUserDTO: CreateUserDto): Promise<UserEntity> {
-    return this.usersRepository.addUser(createUserDTO);
+  async getUser(email: string, id?: string): Promise<UserEntity> {
+    if (email) {
+      return this.usersRepository.getUserByEmail(email);
+    }
+
+    if (id) {
+      return this.usersRepository.getUserById(id);
+    }
+
+    return null;
   }
 }

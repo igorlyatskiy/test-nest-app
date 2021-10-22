@@ -12,9 +12,4 @@ export class UsersController {
   getUsers() {
     return this.usersService.getAllUsers();
   }
-
-  @Post()
-  addUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-    return this.usersService.addUser(createUserDto);
-  }
 }

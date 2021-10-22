@@ -1,5 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -7,27 +12,43 @@ import { CreateUserDto } from './dto/create-user.dto';
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
   async getAllUsers(): Promise<UserEntity[]> {
-    try {
-      return await this.find({
-        relations: ['posts'],
-      });
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
+    return await this.find({
+      relations: ['posts'],
+    });
   }
 
-  async addUser(createUserDTO: CreateUserDto): Promise<UserEntity> {
-    try {
-      const { email, password } = createUserDTO;
-      const user = new UserEntity();
-      user.email = email;
-      user.password = password;
-      user.activated = false;
-      await this.save(user);
-      return user;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException();
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    return await this.findOne({
+      relations: ['posts'],
+      where: { email },
+    });
+  }
+
+  async getUserById(id: string): Promise<UserEntity> {
+    return await this.findOne({
+      relations: ['posts'],
+      where: { userId: id },
+    });
+  }
+
+  async createUser(createUserDTO: CreateUserDto): Promise<UserEntity> {
+    const { email, password } = createUserDTO;
+
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    const isUserAlreadyCreated = await this.findOne({
+      where: { email },
+    });
+
+    if (isUserAlreadyCreated) {
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
+
+    const user = new UserEntity();
+    user.email = email;
+    user.password = encryptedPassword;
+    user.activated = false;
+    await this.save(user);
+    return user;
   }
 }
