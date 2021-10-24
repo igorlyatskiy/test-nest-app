@@ -12,6 +12,7 @@ import { UsersRepository } from '../users/users.repository';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { PublicUserData } from '../users/interfaces/public-user-data.interface';
 import { LoginUserDto } from '../users/dto/login-user.dto';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -42,13 +43,13 @@ export class AuthService {
     const userStatus = user && (await bcrypt.compare(password, user.password));
 
     if (userStatus) {
-      const payload = { userId: user.userId };
+      const payload: JwtPayload = { userId: user.userId };
       const token = this.jwtService.sign(payload);
 
       return {
         email,
         userId: user.userId,
-        token: 'token',
+        token: token,
       };
     } else {
       throw new UnauthorizedException('Invalid credentials');

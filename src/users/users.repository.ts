@@ -1,9 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import {
-  HttpException,
-  HttpStatus,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UserEntity } from './user.entity';
