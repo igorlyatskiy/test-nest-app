@@ -14,13 +14,13 @@ export class PostsRepository extends Repository<Post> {
     }
   }
 
-  async addPost(createPostDTO: CreatePostDto): Promise<Post> {
+  async addPost(createPostDTO: CreatePostDto, userId: string): Promise<Post> {
     try {
       const { body, title } = createPostDTO;
       const post = new Post();
       post.title = title;
       post.body = body;
-      post.userId = '2a3a07aa-0f52-43b4-a75e-0e35fe19611d';
+      post.userId = userId;
       await this.save(post);
       return post;
     } catch (error) {
