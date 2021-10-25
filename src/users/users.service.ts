@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './users.repository';
-import { UserEntity } from './user.entity';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
@@ -9,11 +9,11 @@ export class UsersService {
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
   ) {}
 
-  async getAllUsers(): Promise<UserEntity[]> {
+  async getAllUsers(): Promise<User[]> {
     return this.usersRepository.getAllUsers();
   }
 
-  async getUser(email: string, id?: string): Promise<UserEntity> {
+  async getUser(email: string, id?: string): Promise<User> {
     if (email) {
       return this.usersRepository.getUserByEmail(email);
     }

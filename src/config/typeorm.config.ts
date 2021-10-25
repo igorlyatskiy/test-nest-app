@@ -1,6 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseType } from 'typeorm';
 
 export default class TypeormConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {

@@ -5,14 +5,15 @@ import {
   Entity,
   ManyToOne,
 } from 'typeorm';
-import { UserEntity } from '../users/user.entity';
 
-@Entity()
-export class PostEntity extends BaseEntity {
+import { User } from '../users/user.entity';
+
+@Entity({ name: 'posts' })
+export class Post extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   postId: string;
 
-  @ManyToOne(() => UserEntity, (author: UserEntity) => author.posts)
+  @ManyToOne(() => User, (author: User) => author.posts)
   public userId: string;
 
   @Column()

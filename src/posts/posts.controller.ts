@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { PostEntity } from './post.entity';
+import { Post as PostEntity } from './post.entity';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('posts')

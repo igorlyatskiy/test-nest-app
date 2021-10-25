@@ -5,7 +5,7 @@ export default () => ({
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
     port: +process.env.DB_PORT,
-    synchronize: !!process.env.DB_SYNC,
+    sync: !!process.env.DB_SYNC,
   },
   logger: {
     debug: !!process.env.DEBUG,

@@ -5,10 +5,10 @@ import {
   Entity,
   OneToMany,
 } from 'typeorm';
-import { PostEntity } from '../posts/post.entity';
+import { Post } from '../posts/post.entity';
 
-@Entity()
-export class UserEntity extends BaseEntity {
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
@@ -36,6 +36,6 @@ export class UserEntity extends BaseEntity {
   @Column()
   activated: boolean;
 
-  @OneToMany(() => PostEntity, (post: PostEntity) => post.userId)
-  public posts: PostEntity[];
+  @OneToMany(() => Post, (post: Post) => post.userId)
+  public posts: Post[];
 }
