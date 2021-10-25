@@ -1,16 +1,17 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DatabaseType } from 'typeorm';
 
 export default class TypeormConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
     return {
-      username: configService.get('DB_USERNAME'),
-      password: configService.get('DB_PASSWORD'),
-      database: configService.get('DB_DATABASE'),
-      host: configService.get('DB_HOST'),
-      port: +configService.get('DB_PORT'),
+      username: configService.get('db.username'),
+      password: configService.get('db.password'),
+      database: configService.get('db.database'),
+      host: configService.get('db.host'),
+      port: configService.get('db.port'),
       type: 'postgres',
-      synchronize: !!configService.get('DB_SYNC'),
+      synchronize: configService.get('db.sync'),
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
     };
   }
