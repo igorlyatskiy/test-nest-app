@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import config from './config/index';
+import { ConfigService } from '@nestjs/config';
+
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(config.app.port, () =>
-    console.log('SERVER IS RUNNING ON PORT', config.app.port),
-  );
+  const PORT = configService.get('app.port');
+  await app.listen(PORT, () => console.log('SERVER IS RUNNING ON PORT', PORT));
 }
 bootstrap();

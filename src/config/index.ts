@@ -1,7 +1,4 @@
-import { config } from 'dotenv';
-config();
-
-const localConfig = {
+export default () => ({
   logger: {
     debug: !!process.env.DEBUG,
   },
@@ -20,6 +17,4 @@ const localConfig = {
     secret: process.env.ACCESS_TOKEN_SECRET,
     exp: process.env.TOKEN_EXPIRE_TIME,
   },
-};
-
-export default localConfig;
+});
