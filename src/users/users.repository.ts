@@ -1,5 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './user.entity';
@@ -7,28 +12,49 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
+  private logger = new Logger('UsersRepository');
   async getAllUsers(): Promise<User[]> {
-    return await this.find({
-      relations: ['posts'],
-    });
+    try {
+      this.logger.log('Getting all users');
+      return await this.find({
+        relations: ['posts'],
+      });
+    } catch (error) {
+      this.logger.error('Unhandled error at getAllUsers method', error);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return await this.findOne({
-      relations: ['posts'],
-      where: { email },
-    });
+    try {
+      this.logger.log('Getting user by email');
+      return await this.findOne({
+        relations: ['posts'],
+        where: { email },
+      });
+    } catch (error) {
+      this.logger.error('Unhandled error at getUserByEmail method', error);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getUserById(id: string): Promise<User> {
-    return await this.findOne({
-      relations: ['posts'],
-      where: { userId: id },
-    });
+    try {
+      this.logger.log('Getting user by id');
+      return await this.findOne({
+        relations: ['posts'],
+        where: { userId: id },
+      });
+    } catch (error) {
+      this.logger.error('Unhandled error at getUserById method', error);
+      throw new InternalServerErrorException();
+    }
   }
 
   async createUser(createUserDTO: CreateUserDto): Promise<User> {
     const { email, password } = createUserDTO;
+
+    this.logger.log('Creating the user');
 
     const encryptedPassword = await bcrypt.hash(password, 10);
 
@@ -40,11 +66,16 @@ export class UsersRepository extends Repository<User> {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
 
-    const user = new User();
-    user.email = email;
-    user.password = encryptedPassword;
-    user.activated = false;
-    await this.save(user);
-    return user;
+    try {
+      const user = new User();
+      user.email = email;
+      user.password = encryptedPassword;
+      user.activated = false;
+      await this.save(user);
+      return user;
+    } catch (error) {
+      this.logger.error('Unhandled error at createUser method', error);
+      throw new InternalServerErrorException();
+    }
   }
 }
