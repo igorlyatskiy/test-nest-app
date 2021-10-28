@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
   private logger = new Logger('UsersRepository');
+
   async getAllUsers(): Promise<User[]> {
     try {
       this.logger.log('Getting all users');
@@ -81,22 +82,26 @@ export class UsersRepository extends Repository<User> {
     }
   }
 
-  async updateUser(updateUserDto: UpdateUserDto) {
-    const user = await this.getUserById(updateUserDto.user.userId);
-    if (!user) {
-      throw new NotFoundException('User does not exist');
-    }
-
+  async updateUser(updateUserDto: UpdateUserDto, user: User) {
     this.logger.log('Updating the user');
 
     try {
-      return this.save({
-        userId: updateUserDto.user.userId,
+      return await this.save({
+        userId: user.userId,
         phone: updateUserDto.phone,
         nickname: updateUserDto.nickname,
       });
     } catch (error) {
       this.logger.error('Unhandled error at updateUser method', error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async deleteUser(userId: string) {
+    try {
+      await this.delete({ userId });
+    } catch (error) {
+      this.logger.error('Unhandled error at deleteUser method', error);
       throw new InternalServerErrorException();
     }
   }

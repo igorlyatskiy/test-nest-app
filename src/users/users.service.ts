@@ -34,6 +34,13 @@ export class UsersService {
     if (userId !== user.userId) {
       throw new UnauthorizedException();
     }
-    return this.usersRepository.updateUser(updateUserDto);
+    return this.usersRepository.updateUser(updateUserDto, user);
+  }
+
+  async deleteUser(userId: string, user: User): Promise<void> {
+    if (userId !== user.userId) {
+      throw new UnauthorizedException();
+    }
+    return this.usersRepository.deleteUser(userId);
   }
 }

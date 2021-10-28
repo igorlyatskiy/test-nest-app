@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post as PostEntity } from './post.entity';
 import { ExtendedRequest } from '../users/interfaces/extended-request.interface';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('posts')
 @UseGuards(AuthGuard())
@@ -12,15 +13,34 @@ export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get()
-  getPosts() {
+  getAllPosts() {
     return this.postsService.getAllPosts();
   }
 
+  @Get('/current')
+  getUserPosts(@Req() req) {
+    return this.postsService.getUserPosts(req.user);
+  }
+
   @Post()
-  addPost(
+  createPost(
     @Req() req: ExtendedRequest,
     @Body() createPostDTO: CreatePostDto,
-  ): Promise<PostEntity> {
-    return this.postsService.addPost(createPostDTO, req.user);
+  ) {
+    return this.postsService.createPost(createPostDTO, req.user);
+  }
+
+  @Put('/:postId')
+  updatePost(
+    @Req() req: ExtendedRequest,
+    @Body() updatePostDto: UpdatePostDto,
+    @Param('postId') postId: string,
+  ) {
+    return this.postsService.updatePost(updatePostDto, req.user, postId);
+  }
+
+  @Delete('/:postId')
+  deletePost(@Req() req: ExtendedRequest, @Param('postId') postId: string) {
+    return this.postsService.deletePost(req.user, postId);
   }
 }

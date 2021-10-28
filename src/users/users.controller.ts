@@ -18,7 +18,8 @@ import { DeleteUserDto } from './dto/delete-user.dto';
 @Controller('users')
 @UseGuards(AuthGuard())
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) {
+  }
 
   @Get()
   getAllUsers() {
@@ -40,7 +41,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id') userId, @Body() deleteUserDto: DeleteUserDto) {
-    return;
+  deleteUser(@Param('id') userId, @Req() req: ExtendedRequest) {
+    return this.usersService.deleteUser(userId, req.user);
   }
 }
