@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './users.repository';
 import { User } from './user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,5 +24,16 @@ export class UsersService {
     }
 
     return null;
+  }
+
+  async updateUser(
+    userId: string,
+    updateUserDto: UpdateUserDto,
+    user: User,
+  ): Promise<User> {
+    if (userId !== user.userId) {
+      throw new UnauthorizedException();
+    }
+    return this.usersRepository.updateUser(updateUserDto);
   }
 }

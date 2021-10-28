@@ -1,4 +1,6 @@
+import { User } from '../user.entity';
+
 export class UpdateUserDto {
-  email: string;
-  password: string;
+  phone?: string;
+  nickname?: string;
 }

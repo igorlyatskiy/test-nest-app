@@ -4,11 +4,13 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
@@ -75,6 +77,26 @@ export class UsersRepository extends Repository<User> {
       return user;
     } catch (error) {
       this.logger.error('Unhandled error at createUser method', error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto) {
+    const user = await this.getUserById(updateUserDto.user.userId);
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    this.logger.log('Updating the user');
+
+    try {
+      return this.save({
+        userId: updateUserDto.user.userId,
+        phone: updateUserDto.phone,
+        nickname: updateUserDto.nickname,
+      });
+    } catch (error) {
+      this.logger.error('Unhandled error at updateUser method', error);
       throw new InternalServerErrorException();
     }
   }
