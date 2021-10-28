@@ -1,9 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { Post as PostEntity } from './post.entity';
 import { ExtendedRequest } from '../users/interfaces/extended-request.interface';
 import { UpdatePostDto } from './dto/update-post.dto';
 

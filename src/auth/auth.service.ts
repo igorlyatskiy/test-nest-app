@@ -10,9 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UsersRepository } from '../users/users.repository';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { PublicUserData } from '../users/interfaces/public-user-data.interface';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { PublicUserAuthData } from '../users/interfaces/public-user-auth-data';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +23,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(createUserDTO: CreateUserDto): Promise<PublicUserData> {
+  async signUp(createUserDTO: CreateUserDto): Promise<PublicUserAuthData> {
     const userData = await this.usersRepository.createUser(createUserDTO);
     const publicUserData = {
       userId: userData.userId,
@@ -32,7 +32,7 @@ export class AuthService {
     return publicUserData;
   }
 
-  async logIn(authCredentialsDto: LoginUserDto): Promise<PublicUserData> {
+  async logIn(authCredentialsDto: LoginUserDto): Promise<PublicUserAuthData> {
     const { email, password } = authCredentialsDto;
 
     const user = await this.usersRepository.getUserByEmail(email);

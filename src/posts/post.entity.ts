@@ -13,7 +13,9 @@ export class Post extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   postId: string;
 
-  @ManyToOne(() => User, (author: User) => author.posts)
+  @ManyToOne(() => User, (author: User) => author.posts, {
+    onDelete: 'CASCADE',
+  })
   public userId: string;
 
   @Column()

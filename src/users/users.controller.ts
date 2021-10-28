@@ -13,13 +13,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ExtendedRequest } from './interfaces/extended-request.interface';
-import { DeleteUserDto } from './dto/delete-user.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard())
 export class UsersController {
-  constructor(private usersService: UsersService) {
-  }
+  constructor(private usersService: UsersService) {}
 
   @Get()
   getAllUsers() {

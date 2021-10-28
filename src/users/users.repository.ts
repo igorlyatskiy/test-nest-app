@@ -4,7 +4,6 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
