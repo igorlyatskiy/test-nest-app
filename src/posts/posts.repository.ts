@@ -4,6 +4,7 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { Post } from './post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { User } from '../users/user.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
@@ -14,7 +15,9 @@ export class PostsRepository extends Repository<Post> {
       this.logger.log('Getting all posts');
 
       if (userId) {
-        return await this.find({ where: { userId } });
+        return await this.find({
+          where: { userId },
+        });
       }
 
       return await this.find();
@@ -35,23 +38,20 @@ export class PostsRepository extends Repository<Post> {
     }
   }
 
-  async createPost(
-    createPostDTO: CreatePostDto,
-    userId: string,
-  ): Promise<Post> {
+  async createPost(createPostDTO: CreatePostDto, user: User): Promise<Post> {
     try {
       const { body, title } = createPostDTO;
       const post = new Post();
       post.title = title;
       post.body = body;
-      post.userId = userId;
+      post.user = user;
 
       this.logger.log('Adding the post');
 
       await this.save(post);
       return post;
     } catch (error) {
-      this.logger.error('Unhandled error at addPost method', error);
+      this.logger.error('Unhandled error at createPost method', error);
       throw new InternalServerErrorException();
     }
   }

@@ -4,6 +4,7 @@ import {
   Column,
   Entity,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import { User } from '../users/user.entity';
@@ -13,10 +14,8 @@ export class Post extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   postId: string;
 
-  @ManyToOne(() => User, (author: User) => author.posts, {
-    onDelete: 'CASCADE',
-  })
-  public userId: string;
+  @Column({ name: 'userId' })
+  userId: string;
 
   @Column()
   title: string;
@@ -35,4 +34,14 @@ export class Post extends BaseEntity {
     default: 0,
   })
   dislikes: string;
+
+  @ManyToOne(() => User, (user: User) => user.posts, {
+    eager: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId',
+    name: 'userId',
+  })
+  user: User;
 }

@@ -18,24 +18,18 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   phone: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   nickname: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   activationCode: string;
 
   @Column()
   activated: boolean;
 
-  @OneToMany(() => Post, (post: Post) => post.userId)
-  public posts: Post[];
+  @OneToMany(() => Post, (post) => post.user, { eager: true })
+  posts: Post[];
 }
