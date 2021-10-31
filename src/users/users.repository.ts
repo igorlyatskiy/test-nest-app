@@ -85,11 +85,12 @@ export class UsersRepository extends Repository<User> {
     this.logger.log('Updating the user');
 
     try {
-      return await this.save({
+      await this.save({
         userId: user.userId,
         phone: updateUserDto.phone,
         nickname: updateUserDto.nickname,
       });
+      return await this.getUserById(user.userId);
     } catch (error) {
       this.logger.error('Unhandled error at updateUser method', error);
       throw new InternalServerErrorException();
@@ -98,6 +99,8 @@ export class UsersRepository extends Repository<User> {
 
   async deleteUser(userId: string) {
     try {
+      this.logger.log('Deleting the user');
+
       await this.delete({ userId });
     } catch (error) {
       this.logger.error('Unhandled error at deleteUser method', error);

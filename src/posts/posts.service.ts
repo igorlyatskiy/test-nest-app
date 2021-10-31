@@ -39,7 +39,7 @@ export class PostsService {
   ): Promise<Post> {
     const post = await this.postsRepository.getPost(postId);
 
-    if (post.user.userId !== user.userId) {
+    if (post.userId !== user.userId) {
       throw new UnauthorizedException();
     }
 
@@ -49,7 +49,7 @@ export class PostsService {
   async deletePost(user: User, postId: string): Promise<Post> {
     const post = await this.postsRepository.getPost(postId);
 
-    if (post.user.userId !== user.userId) {
+    if (post.userId !== user.userId) {
       throw new UnauthorizedException();
     }
 
@@ -59,7 +59,7 @@ export class PostsService {
   getPublicPostData(post: Post) {
     const publicPostData: PublicPostData = {
       postId: post.postId,
-      userId: post.user.userId,
+      userId: post.userId || post.user.userId,
       title: post.title,
       body: post.body,
       likes: +post.likes,
