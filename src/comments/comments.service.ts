@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CommentsRepository } from './comments.repository';
@@ -16,8 +21,7 @@ export class CommentsService {
     private postsRepository: PostsRepository,
     @InjectRepository(CommentsRepository)
     private commentsRepository: CommentsRepository,
-  ) {
-  }
+  ) {}
 
   async addComment(user: User, postId: string, dto: CreateCommentDto) {
     const post = await this.postsRepository.getPost(postId);
