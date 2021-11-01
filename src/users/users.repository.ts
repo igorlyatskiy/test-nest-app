@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -70,9 +71,11 @@ export class UsersRepository extends Repository<User> {
 
     try {
       const user = new User();
+      const activationCode = randomBytes(32).toString('hex');
       user.email = email;
       user.password = encryptedPassword;
       user.activated = false;
+      user.activationCode = activationCode;
       await this.save(user);
       return user;
     } catch (error) {

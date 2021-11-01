@@ -9,12 +9,13 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { UsersRepository } from '../users/users.repository';
 import { JwtStrategy } from './jwt.strategy';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, MailService],
       inject: [ConfigService],
       useFactory: async (
         configService: ConfigService,
@@ -29,7 +30,7 @@ import { JwtStrategy } from './jwt.strategy';
     TypeOrmModule.forFeature([UsersRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ConfigService],
+  providers: [AuthService, JwtStrategy, ConfigService, MailService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

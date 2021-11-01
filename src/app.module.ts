@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { typeOrmConfigAsync } from './config/typeorm.config';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 import configuration from './config/index';
 
@@ -13,11 +14,13 @@ import configuration from './config/index';
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     UsersModule,
     PostsModule,
     AuthModule,
+    MailModule,
   ],
 })
 export class AppModule {}

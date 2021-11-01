@@ -13,6 +13,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { PublicUserAuthData } from '../users/interfaces/public-user-auth-data';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,7 @@ export class AuthService {
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async signUp(createUserDTO: CreateUserDto): Promise<PublicUserAuthData> {
@@ -29,6 +31,12 @@ export class AuthService {
       userId: userData.userId,
       email: userData.email,
     };
+    await this.mailService.sendVerificationEmail(
+      userData.email,
+      userData.userId,
+      userData.activationCode,
+    );
+
     return publicUserData;
   }
 
