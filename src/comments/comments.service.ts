@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CommentsRepository } from './comments.repository';
@@ -24,11 +24,7 @@ export class CommentsService {
     return this.commentsRepository.addComment(user, post, dto);
   }
 
-  async updateComment(
-    user: User,
-    commentId: string,
-    dto: UpdateCommentDto,
-  ) {
+  async updateComment(user: User, commentId: string, dto: UpdateCommentDto) {
     const comment = await this.commentsRepository.getComment(commentId);
 
     if (comment.userId !== user.userId) {
@@ -40,6 +36,9 @@ export class CommentsService {
 
   async deleteComment(user: User, commentId: string) {
     const comment = await this.commentsRepository.getComment(commentId);
+    if (!comment) {
+      throw new NotFoundException('Comment does not exist');
+    }
 
     if (comment.userId !== user.userId) {
       throw new ForbiddenException();

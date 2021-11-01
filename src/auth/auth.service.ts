@@ -1,5 +1,6 @@
 import {
-  Injectable, InternalServerErrorException,
+  Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
   UnauthorizedException,
@@ -24,8 +25,7 @@ export class AuthService {
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
     private mailService: MailService,
-  ) {
-  }
+  ) {}
 
   async signUp(createUserDTO: CreateUserDto): Promise<PublicUserAuthData> {
     const userData = await this.usersRepository.createUser(createUserDTO);

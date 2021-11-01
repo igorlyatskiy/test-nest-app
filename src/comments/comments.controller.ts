@@ -18,8 +18,7 @@ import { UpdateCommentDto } from './dto/update-comment-dto';
 @Controller('posts')
 @UseGuards(AuthGuard())
 export class CommentsController {
-  constructor(private commentsService: CommentsService) {
-  }
+  constructor(private commentsService: CommentsService) {}
 
   @Post('/:postId/comments')
   addComment(

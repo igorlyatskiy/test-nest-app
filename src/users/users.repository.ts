@@ -4,7 +4,8 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
-  Logger, NotFoundException,
+  Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';

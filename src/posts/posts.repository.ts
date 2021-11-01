@@ -79,6 +79,7 @@ export class PostsRepository extends Repository<Post> {
 
   async deletePost(postId: string): Promise<Post> {
     try {
+      this.logger.log('Deleting the comment');
       const post = await this.getPost(postId);
 
       await this.delete({ postId });

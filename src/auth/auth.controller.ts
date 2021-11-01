@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { PublicUserAuthData } from '../users/interfaces/public-user-auth-data';
-import { ExtendedRequest } from '../users/interfaces/extended-request.interface';
 
 @Controller('')
 export class AuthController {
@@ -23,10 +22,7 @@ export class AuthController {
   }
 
   @Get('/verify/:id/:token')
-  verifyUser(
-    @Param('id') userId: string,
-    @Param('token') token: string,
-  ) {
+  verifyUser(@Param('id') userId: string, @Param('token') token: string) {
     return this.authService.verifyUser(userId, token);
   }
 }
