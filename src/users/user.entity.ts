@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Post } from '../posts/post.entity';
+import { Comment } from '../comments/comment.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -32,4 +33,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, (post) => post.user, { eager: true })
   posts: Post[];
+
+  @OneToMany(() => Comment, (comment) => comment.user, { eager: false })
+  comments: Comment[];
 }

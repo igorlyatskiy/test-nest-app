@@ -1,5 +1,5 @@
 import {
-  Injectable,
+  Injectable, InternalServerErrorException,
   Logger,
   NotFoundException,
   UnauthorizedException,
@@ -18,12 +18,14 @@ import { MailService } from '../mail/mail.service';
 @Injectable()
 export class AuthService {
   private logger = new Logger('AuthService');
+
   constructor(
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
     private mailService: MailService,
-  ) {}
+  ) {
+  }
 
   async signUp(createUserDTO: CreateUserDto): Promise<PublicUserAuthData> {
     const userData = await this.usersRepository.createUser(createUserDTO);
@@ -62,5 +64,18 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Invalid credentials');
     }
+  }
+
+  async verifyUser(userId: string, token: string) {
+    const activateRequest = await this.usersRepository.activateUser(
+      userId,
+      token,
+    );
+
+    if (!activateRequest) {
+      throw new InternalServerErrorException('Can not verify user');
+    }
+
+    return 'Email has been verified';
   }
 }

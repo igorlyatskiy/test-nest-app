@@ -4,10 +4,11 @@ import {
   Column,
   Entity,
   ManyToOne,
-  JoinColumn,
+  JoinColumn, OneToMany,
 } from 'typeorm';
 
 import { User } from '../users/user.entity';
+import { Comment } from '../comments/comment.entity';
 
 @Entity({ name: 'posts' })
 export class Post extends BaseEntity {
@@ -44,4 +45,7 @@ export class Post extends BaseEntity {
     name: 'userId',
   })
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post, { eager: false })
+  comments: Comment[];
 }

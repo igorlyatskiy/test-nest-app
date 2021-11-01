@@ -17,10 +17,11 @@ export class PostsRepository extends Repository<Post> {
       if (userId) {
         return await this.find({
           where: { userId },
+          relations: ['comments'],
         });
       }
 
-      return await this.find();
+      return await this.find({ relations: ['comments'] });
     } catch (error) {
       this.logger.error('Unhandled error at getAllPosts method', error);
       throw new InternalServerErrorException();
@@ -31,7 +32,7 @@ export class PostsRepository extends Repository<Post> {
     try {
       this.logger.log('Getting the post');
 
-      return await this.findOne({ where: { postId } });
+      return await this.findOne({ where: { postId }, relations: ['comments'] });
     } catch (error) {
       this.logger.error('Unhandled error at getPost method', error);
       throw new InternalServerErrorException();
@@ -79,6 +80,7 @@ export class PostsRepository extends Repository<Post> {
   async deletePost(postId: string): Promise<Post> {
     try {
       const post = await this.getPost(postId);
+
       await this.delete({ postId });
       return post;
     } catch (error) {

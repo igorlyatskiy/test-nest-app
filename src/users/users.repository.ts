@@ -1,9 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   InternalServerErrorException,
-  Logger,
+  Logger, NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
@@ -20,7 +21,7 @@ export class UsersRepository extends Repository<User> {
     try {
       this.logger.log('Getting all users');
       return await this.find({
-        relations: ['posts'],
+        relations: ['posts', 'posts.comments'],
       });
     } catch (error) {
       this.logger.error('Unhandled error at getAllUsers method', error);
@@ -32,7 +33,7 @@ export class UsersRepository extends Repository<User> {
     try {
       this.logger.log('Getting user by email');
       return await this.findOne({
-        relations: ['posts'],
+        relations: ['posts', 'posts.comments'],
         where: { email },
       });
     } catch (error) {
@@ -45,7 +46,7 @@ export class UsersRepository extends Repository<User> {
     try {
       this.logger.log('Getting user by id');
       return await this.findOne({
-        relations: ['posts'],
+        relations: ['posts', 'posts.comments'],
         where: { userId: id },
       });
     } catch (error) {
@@ -107,6 +108,29 @@ export class UsersRepository extends Repository<User> {
       await this.delete({ userId });
     } catch (error) {
       this.logger.error('Unhandled error at deleteUser method', error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async activateUser(userId: string, activationCode: string) {
+    try {
+      this.logger.log('Activating the user');
+
+      const user = await this.findOne({ where: { userId } });
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      if (user.activationCode !== activationCode) {
+        throw new ForbiddenException();
+      }
+
+      return await this.save({
+        userId,
+        activated: true,
+      });
+    } catch (error) {
+      this.logger.error('Unhandled error at activateUser method', error);
       throw new InternalServerErrorException();
     }
   }

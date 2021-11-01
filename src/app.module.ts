@@ -7,6 +7,7 @@ import { typeOrmConfigAsync } from './config/typeorm.config';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
+import { CommentsModule } from './comments/comments.module';
 
 import configuration from './config/index';
 
@@ -21,6 +22,7 @@ import configuration from './config/index';
     PostsModule,
     AuthModule,
     MailModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}
